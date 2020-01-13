@@ -219,27 +219,9 @@ public class SelectorCordovaPlugin extends CordovaPlugin {
         for (int i = 0; i < count; i++) {
             View child = numberPicker.getChildAt(i);
             if (child instanceof EditText) {
-                try {
-                    Field selectorWheelPaintField = numberPicker.getClass()
-                            .getDeclaredField("mSelectorWheelPaint");
-                    selectorWheelPaintField.setAccessible(true);
-                    ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(color);
-                    ((EditText) child).setTextColor(color);
-
-                    //this setTextSize works, but given the 'mTextSize' variable is set in ctor
-                    //the initial values are small, once activated they get larger
-                    //https://android.googlesource.com/platform/frameworks/base.git/+/android-cts-4.2_r1/core/java/android/widget/NumberPicker.java
-                    //((Paint) selectorWheelPaintField.get(numberPicker)).setTextSize(48);
-
+                    ((EditText) child).setTextColor(Color.BLACK);
                     numberPicker.invalidate();
                     return true;
-                } catch (NoSuchFieldException e) {
-                    System.out.println("setNumberPickerTextColor");
-                } catch (IllegalAccessException e) {
-                    System.out.println("setNumberPickerTextColor");
-                } catch (IllegalArgumentException e) {
-                    System.out.println("setNumberPickerTextColor");
-                }
             }
         }
         return false;
@@ -286,7 +268,7 @@ class PickerView {
             //turn off soft keyboard
             picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
             
-            setNumberPickerTextColor(picker, SELECTOR_THEME.getNumberPickerTextColor());
+           // setNumberPickerTextColor(picker, SELECTOR_THEME.getNumberPickerTextColor());
         }
 
         return picker;
@@ -319,14 +301,10 @@ class SelectorTheme {
             return Color.BLACK;
         }
 
-        return Color.WHITE;
+        return Color.BLACK;
     }
 
     public int getAlertBuilderTheme() {
-        if (themeColors.equalsIgnoreCase(SelectorCordovaPlugin.LIGHT_THEME)) {
-            return android.R.style.Theme_DeviceDefault_Light_Dialog_Alert;
-        }
-
         return android.R.style.Theme_DeviceDefault_Dialog_Alert;
     }
 }
